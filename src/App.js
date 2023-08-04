@@ -2,12 +2,12 @@
 import db from './firebase';
 import React from 'react';
 import LoginPage from './Forms/LoginPage'
-
+import UserProfile from './userProfile';
 
 function App() {
   return (
     <div className="App">
-      <LoginPage />
+      <UserProfile/>
     </div>
   );
 }
