@@ -1,44 +1,53 @@
-import React from 'react';
-import { getDatabase, ref, child, get } from 'firebase/database';
-
-
-//get user from users table, how do I know which user to get
-//I need to get the info of the user that is logged in right now
-const dbRef = ref(getDatabase());
-let user = null;
-get(child(dbRef, `Users/1`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    user = snapshot.val();
-    console.log(snapshot.val());
-    
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
+import React, { useEffect, useState } from "react";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 const UserProfile = () => {
-  //get the image, name (first name + last name), email, and user name from firebase and replace the placeholders
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const dbRef = ref(getDatabase());
+
+    get(child(dbRef, "Users/1"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setUser(userData);
+          console.log(userData); // Log user data
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!user) {
+    return <p>No data available</p>;
+  }
+
   return (
     <div className="profileContainer">
-      <div className="topProfile">
-        <div>
-          <img className="userProfilePic"
-          src={user['Profile Image']}/>
-        </div>
-        <div>
-          <h4 className='profileName'>{user['FirstName']} {user['LastName']}</h4>
-          <div className='userProfileDetails'>
-            <h6>Email: {user['Email']}</h6>
-            <h6>Username:{user['Username']}</h6>
-            <h6>Password: ******</h6>
-            <h6>Reset Password</h6>
-          </div>
-
-        </div>
+      <h4 className="profileName">
+        {user["FirstName"]} {user["LastName"]}
+      </h4>
+      <div className="userProfileDetails">
+        <div><img src={user["Profile Image"]}/> </div>
+        <h6>Email: {user["Email Address"]}</h6>
+        <h6>Username:{user["Username"]}</h6>
+        <h6>Password: ******</h6>
+        <h6>Reset Password</h6>
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default UserProfile;
