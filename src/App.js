@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import SignUpModal from "./Forms/SignUpModal";
 import ForgetPassword from "./Forms/ForgetPassword";
+import SingleProduct from "./components/SingleProduct";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/map" element={<Map />} />
-
+          <Route path="/singleproduct" element={<SingleProduct />} />
           <Route path="/signup" element={<SignUpModal />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
         </Routes>
