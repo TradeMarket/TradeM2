@@ -9,7 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import SignUpModal from "./Forms/SignUpModal";
 import ForgetPassword from "./Forms/ForgetPassword";
-import SingleProduct from "./components/SingleProduct";
+import SingleProduct from "./components/SingleProduct/SingleProduct";
 
 function App() {
   return (
