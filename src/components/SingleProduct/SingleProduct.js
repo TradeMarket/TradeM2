@@ -3,8 +3,10 @@ import { getDatabase, ref, child, get } from 'firebase/database';
 import { Image, Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './SingleProduct.css';
+import { useParams } from 'react-router-dom';
 
 export default function SingleProduct() {
+  let {productId} = useParams();
   //get product images and info from firebase
   const [product, setProduct] = useState(null);
   const [user, setUser] = useState(null);
@@ -12,22 +14,12 @@ export default function SingleProduct() {
   useEffect(() => {
     const dbRef = ref(getDatabase());
 
-    get(child(dbRef, 'Users/1')).then((snapshot) => {
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        setUser(userData);
-      } else {
-        console.log('No data available');
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
+    //put Links in pages with product list so each of the products links to this page with the product id in the link to this page
+    //make sure the route on the app.js is updated so it says /singleproduct:id
+    //use the useparams method to get the productid and then use that in the below get method to get the specific product clicked
+    //then use the product to get the userId associated with it and use it in the get method for the user
 
-    get(child(dbRef, 'Products/1'))
+    get(child(dbRef, `Products/${productId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           const productData = snapshot.val();
@@ -42,6 +34,22 @@ export default function SingleProduct() {
       .finally(() => {
         setLoading(false);
       });
+
+      get(child(dbRef, `Users/${product.userId}`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setUser(userData);
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
   }, []);
   if (loading) {
     return (
