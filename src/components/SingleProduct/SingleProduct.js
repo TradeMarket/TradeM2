@@ -103,6 +103,9 @@ export default function SingleProduct() {
         </p>
 
         </div>
+        <Link to="/chat" state={{ username: user.userName }}>
+        <button>Chat</button>
+        </Link>
         </div>
         
         </div>
