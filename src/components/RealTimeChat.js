@@ -1,5 +1,5 @@
 import React from "react";
-import {getDatabase, ref, set} from 'firebase/database';
+import {getDatabase, ref, set, onChildAdded} from 'firebase/database';
 import { useLocation } from "react-router-dom";
 export default function RealTimeChat() {
   //from singleproduct the userId or username is passed in through a state
@@ -26,10 +26,11 @@ export default function RealTimeChat() {
       message,
     });
   }
+  
 
-  const fetchChat = ref(dbRef, 'Messages/');
 
-  fetchChat.on("child_added", function (snapshot) {
+  
+  onChildAdded(ref(dbRef, 'Messages/'), function (snapshot) {
     const messages = snapshot.val();
     const message = `<li class=${
       userName === messages.userName ? "sent" : "receive"
